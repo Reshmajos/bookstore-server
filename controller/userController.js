@@ -1,10 +1,29 @@
+const users = require('../models/userModel')
+
 // register api request
-exports.registerController = (req,res)=>{
+exports.registerController = async (req,res)=>{
     console.log("inside registercontroller");
     const {username,email,password} = req.body
     console.log(username,email,password);
-    console.log(req.body);
-    res.status(200).json("request received")
+
+    try{
+        // check mail in model
+        const existingUser = await users.findOne({email})
+        if(existingUser){
+            res.status(409).json("User already exist...Please Login")
+        }else{
+            const newUser = new users({
+                username,email,password
+            })
+            // saving 
+            await newUser.save()
+            res.status(200).json(newUser)
+        }
+    }catch(error){
+        console.log(error);
+      res.status(500).json(error)
+    }
+    // console.log(req.body);
     
 }
 
