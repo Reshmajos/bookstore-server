@@ -50,11 +50,15 @@ exports.getHomePageBooksController = async (req,res)=>{
 
 exports.getUserAllBookPageController = async (req,res)=>{
   console.log("Inside getUserAllBookPageController");
+  // get query from req
+  const searchKey = req.query.search
+  console.log(searchKey);
+  
   // get login user mail from token
   const loginUserMail = req.payload
   try{
     // get all books from db except loggedin user
-    const allBooks = await books.find({sellerMail:{$ne:loginUserMail}})
+    const allBooks = await books.find({sellerMail:{$ne:loginUserMail},title:{$regex:searchKey,$options:'i'}})
     res.status(200).json(allBooks)
   }catch(error){
     console.log(error);

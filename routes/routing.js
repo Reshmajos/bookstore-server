@@ -26,9 +26,13 @@ router.get('/books/home',bookController.getHomePageBooksController)
 router.post('/user/book/add',jwtMiddleware,multerMiddleware.array('uploadImages',3),bookController.addBookController)
 
 // get all books page
-router.get('/books/all',jwtMiddleware,bookController.getHomePageBooksController)
+router.get('/books/all',jwtMiddleware,bookController.getUserAllBookPageController)
 
 // get all user uploaded books page
 router.get('/user-books/all',jwtMiddleware,bookController.getUserUploadBookProfilePageController)
+
+// get all user bought books
+router.get('/user-books/bought',jwtMiddleware,bookController.getUserBoughtProfilePageController)
+
 
 module.exports = router
