@@ -97,13 +97,27 @@ exports.updateUserProfileController = async (req,res)=>{
     // get body text content: username
     const {username,password,bio,role,picture} = req.body
     // get file data
-    const uploadImg = req.file?req.file.filename:picture
-    console.log(id,email,username,password,bio,role,uploadImg);
+    const uploadImage = req.file?req.file.filename:picture
+    console.log(id,email,username,password,bio,role,uploadImage);
     try{
         const updateUser = await users.findByIdAndUpdate({_id:id},{
-            username,email,password,picture:uploadImg,bio,role
+            username,email,password,picture:uploadImage,bio,role
         },{new:true})
         res.status(200).json(updateUser)
+    }catch(error){
+        console.log(error);
+        res.status(500).json(error) 
+    }
+    
+}
+
+// get all users
+exports.getAllUsersController = async (req,res)=>{
+    console.log("inside getAllUsersController ");
+    try{
+        // all users other than admin
+        const allUsers = await users.find({role:{$ne:"admin"}})
+        res.status(200).json(allUsers)
     }catch(error){
         console.log(error);
         res.status(500).json(error) 
